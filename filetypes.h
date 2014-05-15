@@ -9,7 +9,7 @@ namespace filestructure{
 	public:
 
 		virtual std::vector<MappedFileOutput*> &
-			get_file_header(std::vector<MappedFileType *> *mapped_ftype_ptr_vec) = 0;
+			get_header_section(std::vector<MappedFileType *> *mapped_ftype_ptr_vec) = 0;
 
 		virtual MappedFileLayout &
 			retrive_offset(MappedFileType * map_ftype_ptr,
