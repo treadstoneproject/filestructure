@@ -32,5 +32,8 @@
     <ClCompile Include="test_fs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_pe_.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

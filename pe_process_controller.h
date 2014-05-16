@@ -11,20 +11,20 @@
 namespace filestructure{
 
 
-	template<typename MAPPED_FILE typename MappedFileLayout>
-	class pe_process_controller :flietype<MAPPED_FILE, MappedFileLayout>{
+	template<typename MAPPED_FILE ,typename MappedFileLayout>
+	class pe_process_controller  {
 
 
 	public:
-		std::vector<struct IMAGE_NT_HEADERS *>& get_pe_header(std::vector<MAPPED_FILE *> *mapped_file_vec);
+		std::vector<struct IMAGE_NT_HEADERS *>& get_pe_header(std::vector<MAPPED_FILE *> *mapped_file_vec){ }
 
-			uint8_t  retrive_offset_lite(
+		uint8_t  retrive_offset_lite(
 			std::vector<MAPPED_FILE *> pe_map_vec_ptr,
-			std::vector<struct IMAGE_NT_HEADERS *> pe_header);
+			std::vector<struct IMAGE_NT_HEADERS *> pe_header){}
 
-			struct IMAGE_NT_HEADERS_EXT& retrive_offset(
-				MAPPED_FILE *pe_map_ptr,
-				IMAGE_NT_HEADERS *pe_header)const;
+		struct IMAGE_NT_HEADERS_EXT& retrive_offset(
+			MAPPED_FILE *pe_map_ptr,
+			IMAGE_NT_HEADERS *pe_header)const{}
 
 
 
