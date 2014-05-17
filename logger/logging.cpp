@@ -6,7 +6,7 @@
 #include "logging.h"
 
 #include <stdlib.h>
-#include <time.h>
+#include <ctime>
 
 std::ofstream Logger::info_log_file_;
 std::ofstream Logger::warn_log_file_;
@@ -37,7 +37,7 @@ std::ostream& Logger::Start(LogSeverity severity,
 	time_t tm;
 	time(&tm);
 	char time_string[128];
-	//ctime_r(&tm, time_string);
+	ctime_s(time_string, 128, &tm);
 	return GetStream(severity) << time_string
 		<< " " << file << ":" << line
 		<< " (" << function << ") " << std::flush;

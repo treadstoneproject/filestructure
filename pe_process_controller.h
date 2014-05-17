@@ -1,38 +1,43 @@
 #ifndef FILESTRUCTURE_PE_PROCESS_CONTROLLER_H
 #define FILESTRUCTURE_PE_PROCESS_CONTROLLER_H
 
+//external library
 #include "boost/shared_ptr.hpp"
 
+#include "filetypes.h"
+
+//standard lib
 #include <vector>
 #include <map>
 
+//internal lib.
 #include "pe.h"
 
 namespace filestructure{
 
 
-	template<typename MAPPED_FILE ,typename MappedFileLayout>
-	class pe_process_controller  {
-
+	template<typename MappedFileType, typename MappedFileLayout>
+	class pe_process_controller : public flietypes<MappedFileType, MappedFileLayout>  {
 
 	public:
-		std::vector<struct IMAGE_NT_HEADERS *>& get_pe_header(std::vector<MAPPED_FILE *> *mapped_file_vec){ }
 
-		uint8_t  retrive_offset_lite(
-			std::vector<MAPPED_FILE *> pe_map_vec_ptr,
-			std::vector<struct IMAGE_NT_HEADERS *> pe_header){}
+		virtual std::vector<MappedFileLayout*> &
+		get_header_section(std::vector<MappedFileType *> *mapped_ftype_ptr_vec) = 0;
 
-		struct IMAGE_NT_HEADERS_EXT& retrive_offset(
-			MAPPED_FILE *pe_map_ptr,
-			IMAGE_NT_HEADERS *pe_header)const{}
+		virtual MappedFileLayout &
+			retrive_offset(MappedFileType * map_ftype_ptr,
+			MappedFileLayout * map_flayout_header) = 0;
 
-
+		virtual std::vector<MappedFileLayout *>
+			retrive_offset_lite(
+			std::vector<MappedFileType *>   map_ftype_ptr_vec,
+			std::vector<MappedFileLayout *> map_flayout_ptr_vec) = 0;
 
 
 	private:
-		IMAGE_NT_HEADERS *image_nt_header;
+		MappedFileLayout *image_nt_header;
 
-		std::vector<boost::shared_ptr<std::vector<struct IMAGE_NT_HEADERS *> > > pe_header_vec_shared;
+		std::vector<boost::shared_ptr<std::vector<MappedFileLayout *> > > pe_header_vec_shared;
 		//retrive_offset_lite
 		boost::shared_ptr<std::vector<struct IMAGE_NT_HEADERS_EXT *> > pe_offset_vec_shared_ptr;
 		// file buffer

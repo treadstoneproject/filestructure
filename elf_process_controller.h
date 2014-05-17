@@ -7,7 +7,7 @@
 namespace filestructure{
 
 	template<typename MappedFileType,typename MappedFileLayout>
-	class elf_process_controller : public flietypes<MappedFileType, MappedFileLayout> {
+	class elf_process_controller : public flietypes<MappedFileType, MappedFileLayout>  {
 
 	public:
 		
@@ -22,7 +22,7 @@ namespace filestructure{
 			retrive_offset_lite(
 			std::vector<MappedFileType *>   map_ftype_ptr_vec,
 			std::vector<MappedFileLayout *> map_flayout_ptr_vec);
-
+	     
 		bool get_file_support();
 
 	};
