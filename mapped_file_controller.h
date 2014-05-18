@@ -42,19 +42,21 @@ namespace filestructure{
 	};
 	*/
 
-	template<typename FileType = struct common_filetype,
-		typename MAPPED_FILE = struct MAPPED_FILE_PE>
+	template<typename MAPPED_FILE>
 	class mapped_file_controller{
+
 	public:
 		typedef std::vector<MAPPED_FILE *> map_file_vec;
 		typedef boost::shared_ptr<map_file_vec> mapped_vec_ptr;
 
-
+		
+		mapped_file_controller();
+		
 		bool  mapped_file(std::vector<const char*> file_name_vec,
 		std::vector<MAPPED_FILE *> mapped_vec);
 
 		bool file_read();
-		bool file_read_mapped();
+		bool fread_mapped();
 		bool set_filepath(char const *file_path);
 		FILE *get_file() const;
 		
@@ -62,10 +64,14 @@ namespace filestructure{
 
 		int & get_popen_file();
 		bool close_file();
+		
+
+		bool get_file_status();
 
 	private:
 
 		//file handler
+		
 		FILE *p_file;
 		int p_open_file;
 		struct stat  file_status;
@@ -78,7 +84,7 @@ namespace filestructure{
 
 		boost::iostreams::mapped_file_source  mf_source;// (mf_params);
 
-
+		
 
 	};
 }
