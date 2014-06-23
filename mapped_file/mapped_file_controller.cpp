@@ -1,8 +1,11 @@
 
 
 #include "mapped_file_controller.h"
+
 #include "logger/logging.h"
 #include <stdexcept>
+#include <exception>
+
 
 #include <fcntl.h> 
 #include <io.h> 
@@ -20,8 +23,22 @@
 
 using namespace filestructure;
 
-template<typename FileType, typename MAPPED_FILE>
-bool mapped_file_controller<FileType, MAPPED_FILE>::file_read()
+template<typename MAPPED_FILE>
+mapped_file_controller< MAPPED_FILE>::mapped_file_controller(){
+
+}
+
+template< typename MAPPED_FILE>
+bool mapped_file_controller<MAPPED_FILE>::get_file_status()
+{
+
+	return false;
+}
+
+
+
+template<typename MAPPED_FILE>
+bool mapped_file_controller<MAPPED_FILE>::file_read()
 {
 
 	if (stat(file_path, &file_status) != 0 || S_ISDIR(file_status.st_mode)) {
@@ -39,16 +56,16 @@ bool mapped_file_controller<FileType, MAPPED_FILE>::file_read()
 	return true;
 }
 
-template<typename FileType, typename MAPPED_FILE>
-bool mapped_file_controller<FileType, MAPPED_FILE>::file_read_mapped()
+template<typename MAPPED_FILE>
+bool mapped_file_controller<MAPPED_FILE>::fread_mapped()
 {
-	errno_t errno;
+	
 	if (stat(file_path, &file_status) != 0 || S_ISDIR(file_status.st_mode)) {
 		throw std::runtime_error("File cannot check status");
 		return false;
 	}
 
-	errno = _sopen_s(&p_open_file, file_path, O_RDONLY, _S_IREAD, 0);
+	_sopen_s(&p_open_file, file_path, O_RDONLY, _SH_DENYNO, _S_IREAD | _S_IWRITE);
 
 	if (p_open_file == NULL) {
 		throw std::runtime_error("File cannot open");
@@ -58,12 +75,14 @@ bool mapped_file_controller<FileType, MAPPED_FILE>::file_read_mapped()
 	return true;
 }
 
-template<typename FileType, typename MAPPED_FILE>
+template<typename MAPPED_FILE>
 typename int &
-mapped_file_controller<FileType, MAPPED_FILE>::get_popen_file()
+mapped_file_controller<MAPPED_FILE>::get_popen_file()
 {
 	return p_open_file;
 }
+
+
 
 /*
 template<typename FileType, typename MAPPED_FILE>
@@ -73,8 +92,8 @@ return &file_status;
 */
 
 
-template<typename FileType, typename MAPPED_FILE>
-bool mapped_file_controller<FileType, MAPPED_FILE>::set_filepath(char const *file_path)
+template< typename MAPPED_FILE>
+bool mapped_file_controller<MAPPED_FILE>::set_filepath(char const *file_path)
 {
 	this->file_path = file_path;
 
@@ -84,21 +103,21 @@ bool mapped_file_controller<FileType, MAPPED_FILE>::set_filepath(char const *fil
 	return false;
 }
 
-template<typename FileType, typename MAPPED_FILE>
-FILE *mapped_file_controller<FileType, MAPPED_FILE>::get_file() const
+template<typename MAPPED_FILE>
+FILE *mapped_file_controller<MAPPED_FILE>::get_file() const
 {
 	return p_file;
 }
 
-template<typename FileType, typename MAPPED_FILE>
-bool mapped_file_controller<FileType, MAPPED_FILE>::close_file()
+template<typename MAPPED_FILE>
+bool mapped_file_controller<MAPPED_FILE>::close_file()
 {
 	_close(p_open_file);
 	return true;
 }
 
-template<typename FileType, typename MAPPED_FILE>
-bool  mapped_file_controller<FileType, MAPPED_FILE>::
+template<typename MAPPED_FILE>
+bool  mapped_file_controller<MAPPED_FILE>::
 mapped_file(std::vector<const char*> file_name_vec,
 std::vector<MAPPED_FILE *> mapped_vec){
 
@@ -140,7 +159,7 @@ std::vector<MAPPED_FILE *> mapped_vec){
 
 		if (set_filepath(file_names)) {
 
-			if (!file_read_mapped()) {
+			if (!fread_mapped()) {
 				LOG(INFO) << "[** File cannot open path **]";
 			}
 
@@ -150,9 +169,9 @@ std::vector<MAPPED_FILE *> mapped_vec){
 					LOG(INFO) << "[** Mapped pointer is null. **]";
 				}
 
-				struct stat *file_status_s = &file_status;// file_offset_object.get_file_status();
-
-				mapped_file_ptr->size = file_status_s->st_size;
+				//struct stat *file_status_s = &file_status;// file_offset_object.get_file_status();
+				LOG(INFO) << "File size : " << file_status.st_size;
+				mapped_file_ptr->size = file_status.st_size;
 
 				mapped_file_ptr->file = get_popen_file();
 
@@ -168,8 +187,10 @@ std::vector<MAPPED_FILE *> mapped_vec){
 				//insert file name path.
 				mapped_file_ptr->file_name = s_file_name.c_str();
 
+				close_file();
+
 				//read file map.
-				boost::iostreams::mapped_file_params  mf_params(s_file_name);
+				boost::iostreams::mapped_file_params mf_params(s_file_name);
 				mf_source.open(mf_params);
 				if (mf_source.is_open()){
 					LOG(ERROR) << "Cannot open file with mapped_file_source";
@@ -177,8 +198,8 @@ std::vector<MAPPED_FILE *> mapped_vec){
 				mapped_file_ptr->data = (uint8_t*)mf_source.data();
 
 			}
-			catch (std::exception ex) {
-				LOG(INFO) << "Error, Mapped file";
+			catch(std::exception ex) {
+				LOG(INFO) << "Error, Mapped file" << ex.what();
 				continue;
 
 			}
@@ -191,4 +212,5 @@ std::vector<MAPPED_FILE *> mapped_vec){
 }
 
 
-template class mapped_file_controller<struct common_filetype, struct MAPPED_FILE_PE>;
+
+template class mapped_file_controller<struct MAPPED_FILE_PE>;

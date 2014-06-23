@@ -6,7 +6,7 @@
 
 #include "gtest/gtest.h"
 
-#include "mapped_file_controller.h"
+#include "mapped_file/mapped_file_controller.h"
 
 //#include "elf_process_controller.h"
 #include "pe.h"
@@ -33,7 +33,7 @@ TEST(MappedFileController, TestIntial){
 	for (iter_mfv = mapped_ptr_vec.begin(); iter_mfv != mapped_ptr_vec.end(); ++iter_mfv){
 		MAPPED_FILE_PE  * mf_pe = *iter_mfv;
 		LOG(INFO) << "Mapped_file PE size : " << mf_pe->size;
-		LOG(INFO) << "Mapped_file PE START : " << mf_pe->data[0];
+		LOG(INFO) << "Mapped_file PE starts buffer : " << mf_pe->data[0];
 	}
 
 }
