@@ -83,9 +83,7 @@ namespace filestructure{
 		MAPPED_FILE *mapped_file_ptr;
 
 		boost::iostreams::mapped_file_source  mf_source;// (mf_params);
-
-		
-
+	
 	};
 }
 

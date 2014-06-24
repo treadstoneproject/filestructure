@@ -22,7 +22,8 @@ TEST(MappedFileController, TestIntial){
 	filestructure::mapped_file_controller<struct MAPPED_FILE_PE>
 		mfc;
 	std::vector<const char*> char_vec;
-	const char * file_name = "E:\\Dropbox\\reversing_engineer\\reversing_files_test\\clam_ISmsi_ext.exe";
+	//Support Win32 : const char * file_name = "E:\\Dropbox\\reversing_engineer\\reversing_files_test\\clam_ISmsi_ext.exe";
+	const char * file_name = "";// file read for check pe
 	char_vec.push_back(file_name);
 	
 	MAPPED_FILE_PE * file_pe = new MAPPED_FILE_PE();
@@ -56,7 +57,8 @@ void initial_logging(std::string filename_prefix){
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	initial_logging("E:\\workspacecpp\\filestructure\\log");
+	 initial_logging("/home/chatsiri/workspacecpp/pthread_sync_ocl/log");
+	//Support Win32:initial_logging("E:\\workspacecpp\\filestructure\\log");
 	::testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 	return 0;
