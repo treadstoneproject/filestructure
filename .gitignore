@@ -222,3 +222,12 @@ filestructure/*
 log.INFO
 log.WARN
 log.ERROR
+
+#object file
+*.o
+.deps/
+.deps/*
+*.hpp.swp
+*.cpp.swp
+*.hpp.swo
+*.cpp.swo
