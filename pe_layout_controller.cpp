@@ -127,6 +127,10 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
             iter_pe_map_vptr != pe_map_vec_ptr->end();
             ++iter_pe_map_vptr) {
         pe_map_ptr  = *iter_pe_map_vptr;
+
+				if(pe_map_ptr->file_map_md5 == 0){
+					LOG(INFO) << "File not initial MD5 of file in pre scanning";
+				}
         //File Map MD5 for
         std::map<uint64_t, IMAGE_NT_HEADERS *>::iterator iter_header_file =
                 header_file_map.find(pe_map_ptr->file_map_md5);
@@ -164,8 +168,8 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
 					
         } else {
             LOG(INFO) << "File name : " << pe_map_ptr->file_name <<", Not MD5 initial part. ";
-        }
-    }
+        }//else
+    }// for
 
 }
 
