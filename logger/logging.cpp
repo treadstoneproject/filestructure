@@ -37,7 +37,8 @@ std::ostream& Logger::Start(LogSeverity severity,
 	time_t tm;
 	time(&tm);
 	char time_string[128];
-	ctime_s(time_string, 128, &tm);
+	//ctime_s(time_string, 128, &tm); //support PE.
+	ctime_r(&tm, time_string);
 	return GetStream(severity) << time_string
 		<< " " << file << ":" << line
 		<< " (" << function << ") " << std::flush;

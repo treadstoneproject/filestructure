@@ -4,30 +4,31 @@
 //external library
 #include "boost/shared_ptr.hpp"
 
-#include "filetypes.h"
-
 //standard lib
 #include <vector>
 #include <map>
 
 //internal lib.
-#include "pe.h"
+#include "pe.hpp"
+#include "layout_controller.hpp"
+#include "logger/logging.h"
 
+#define MIN(x,y) ((x < y)?(x):(y))
 
 namespace filestructure
 {
 
 
-    template<typename MappedFileLayout>
-    class pe_layout_controller : layout_controller<IMAGE_NT_HEADERS, MappedFileLayout>
+    template<typename HeaderFile, typename MappedFileLayout>
+    class pe_layout_controller : layout_controller<HeaderFile, MappedFileLayout>
     {
 
         public:
 
-            virtual std::map<uint64_t, HeaderFile>
-            get_header(std::vector<MappedFileLayout *> *mapped_file_vec) = 0;
+            std::map<uint64_t,struct IMAGE_NT_HEADERS *> &
+            get_header(std::vector<MappedFileLayout *> *mapped_file_vec);
 
-            virtual std::vector<MappedFileLayout *>&
+            virtual std::vector<HeaderFile *>&
             get_offset(std::vector<MappedFileLayout *> *mapped_file_vec) = 0;
 
             /**
@@ -49,14 +50,16 @@ namespace filestructure
 
             boost::shared_ptr<std::vector<MappedFileLayout *> >  pe_header_vec;
             //retrive_offset_lite
-            boost::shared_ptr<std::vector<struct IMAGE_NT_HEADERS_EXT *> > pe_offset_vec_sptr;
+            boost::shared_ptr<std::vector<HeaderFile *> > pe_offset_vec_sptr;
             // file buffer
             std::vector<uint8_t> file_buffer_vec;
 
             // add buffer and address of file.
             std::map<uint8_t *, size_t> file_buff_addr_map;
 
-
+            std::vector<struct IMAGE_NT_HEADERS *> pe_header;
+		
+						std::map<uint64_t, IMAGE_NT_HEADERS *> header_file_map;
     };
 
 

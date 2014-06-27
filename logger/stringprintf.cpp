@@ -13,7 +13,8 @@ static void StringAppendV(string* dst, const char* format, va_list ap) {
 	// of the structure before using it and use that copy instead.
 	va_list backup_ap;
 	va_copy(backup_ap, ap);
-	int result = vsnprintf_s(space, sizeof(space), format, backup_ap);
+	//int result = vsnprintf_s(space, sizeof(space), format, backup_ap); // Support win32
+  int result = vsnprintf(space, sizeof(space), format, backup_ap);
 	va_end(backup_ap);
 
 	if ((result >= 0) && (result < sizeof(space))) {
@@ -37,7 +38,8 @@ static void StringAppendV(string* dst, const char* format, va_list ap) {
 
 		// Restore the va_list before we use it again
 		va_copy(backup_ap, ap);
-		result = vsnprintf_s(buf, sizeof(space), length, format, backup_ap);
+		//result = vsnprintf_s(buf, sizeof(space), length, format, backup_ap); //support win32
+		result = vsnprintf(space, sizeof(space), format, backup_ap);
 		va_end(backup_ap);
 
 		if ((result >= 0) && (result < length)) {

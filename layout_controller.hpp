@@ -6,13 +6,10 @@ class layout_controller{
 
 	public:
 
-			virtual std::map<uint64_t, HeaderFile> 
-				get_header(std::vector<MappedFileLayout *> *mapped_file_vec) = 0;
-
-			virtual std::vector<MappedFileLayout *> &   
+			virtual std::vector<HeaderFile *> &   
 				get_offset(std::vector<MappedFileLayout *> *mapped_file_vec) = 0;
 
-			virtual std::vector<MappedFileLayout *> &
+			virtual bool
 				pre_scan_layout(std::vector<MappedFileLayout *> *mapped_file_vec)  = 0;	
 };
 
