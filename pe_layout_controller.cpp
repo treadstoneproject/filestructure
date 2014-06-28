@@ -29,8 +29,8 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 {
     LOG(INFO) << "Intial PE header, pe_file_controller<MAPPED_FILE>::get_pe_header...";
     LOG(INFO) << "get_pe_header, vector_size : " << mapped_ftype_ptr_vec->size();
-
-
+		
+    typedef std::pair<uint64_t, struct IMAGE_NT_HEADERS *>  hmap_pair;
     PIMAGE_DOS_HEADER dos_header;
     PIMAGE_NT_HEADERS nt_header;
     size_t headers_size = 0;
@@ -40,8 +40,12 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
     for (iter_mf_vec = mapped_ftype_ptr_vec->begin();
             iter_mf_vec != mapped_ftype_ptr_vec->end();
             ++iter_mf_vec) {
+
         mapped_file_ptr = *iter_mf_vec;
-				nt_header = new IMAGE_NT_HEADERS;
+        uint64_t fmd5 = mapped_file_ptr->file_map_md5;
+
+        nt_header = new IMAGE_NT_HEADERS;
+
         if (*mapped_file_ptr->data < sizeof(struct IMAGE_DOS_HEADER)) {
             LOG(INFO) << "Mappper data < IMAGE_DOS_HEADER";
             continue;
@@ -51,18 +55,14 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
         if (dos_header->e_magic != IMAGE_DOS_SIGNATURE) {
             LOG(INFO) << "Mapper e_mage != IMAGE_DOS_SIGNATURE";
-						uint64_t fmd5 = mapped_file_ptr->file_map_md5;
-            header_file_map.insert(
-										std::pair<uint64_t, IMAGE_NT_HEADERS*>(fmd5, nt_header));
+            header_file_map.insert(hmap_pair(fmd5, nt_header));
 
             continue;
         }
 
         if (dos_header->e_lfanew < 0) {
             LOG(INFO) << "Mapper e_lfanew < 0";
-            //header_file_map.insert(
-						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS>(mapped_file_ptr->file_map_md5, nt_header));
-
+            header_file_map.insert(hmap_pair(fmd5, nt_header));
 
             continue;
         }
@@ -73,10 +73,7 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
         if (mapped_file_ptr->size < headers_size) {
             LOG(INFO) << "Mapper size < headers_size";
-            //header_file_map.insert(
-						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS>(mapped_file_ptr->file_map_md5, nt_header));
-
-
+            header_file_map.insert(hmap_pair(fmd5, nt_header));
             continue;
         }
 
@@ -94,11 +91,7 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
         if (nt_header->Signature == IMAGE_NT_SIGNATURE &&
                 nt_header->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
                 mapped_file_ptr->size > headers_size) {
-
-            //header_file_map.insert(
-						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(mapped_file_ptr->file_map_md5, nt_header));
-
-
+            header_file_map.insert(hmap_pair(fmd5, nt_header));
             LOG(INFO) << "push back completed";
         }
 
@@ -110,11 +103,11 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
 
 template<typename HeaderFile, typename MappedFileLayout>
-std::vector<HeaderFile*>&
+std::vector<HeaderFile *>&
 pe_layout_controller<HeaderFile, MappedFileLayout>::
 get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
 {
-		LOG(INFO) << "Start Get offset file for checking post infected file.";
+    LOG(INFO) << "Start Get offset file for checking post infected file.";
 
     int count_offset;
     int count_section;
@@ -136,19 +129,24 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
             ++iter_pe_map_vptr) {
         pe_map_ptr  = *iter_pe_map_vptr;
 
-				if(pe_map_ptr->file_map_md5 == 0){
-					LOG(INFO) << "File not initial MD5 of file in pre scanning";
-				}
+        if(pe_map_ptr->file_map_md5 == 0) {
+            LOG(INFO) << "File not initial MD5 of file in pre scanning";
+        }
+
+
         //File Map MD5 for
         std::map<uint64_t, IMAGE_NT_HEADERS *>::iterator iter_header_file =
                 header_file_map.find(pe_map_ptr->file_map_md5);
-				std::pair<uint64_t, IMAGE_NT_HEADERS *>  header_file_pair = *iter_header_file;
-				
+        std::pair<uint64_t, IMAGE_NT_HEADERS *>  header_file_pair = *iter_header_file;
+
         if(header_file_pair.second) {
             nt_header = header_file_pair.second;
 
             rva_block_     = nt_header->OptionalHeader.AddressOfEntryPoint;
             buffer_length_ = pe_map_ptr->size -((uint8_t *)&nt_header - pe_map_ptr->data);
+
+						LOG(INFO) << "PE rva_block_ : " << rva_block_;
+						LOG(INFO) << "PE buffer_length_ : " << buffer_length_;
 
             nt_headers_ext = new struct IMAGE_NT_HEADERS_EXT;
             nt_headers_ext->rva_block  = rva_block_;
@@ -170,10 +168,11 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
                         nt_headers_ext->size        = pe_map_ptr->size;// Size of file.
                         pe_offset_vec_sptr->push_back(	nt_headers_ext );
                     }//if
+										count_offset++;
                 }//if
 
             }//while
-					
+
         } else {
             LOG(INFO) << "File name : " << pe_map_ptr->file_name <<", Not MD5 initial part. ";
         }//else

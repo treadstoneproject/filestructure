@@ -8,37 +8,46 @@
 #include "filestructure/pe.hpp"
 #include <vector>
 
+#include "boost/functional/hash.hpp"
+#include "filestructure/pe_layout_controller.hpp"
+
 using namespace utils;
+using filestructure::pe_layout_controller;
 
 class PELayoutControllerTest : public ::testing::Test
 {
 
     protected:
         virtual void SetUp() {
-#if  _WIN32 
+#if  _WIN32
 
 #elif __linux__
-						file_sig  = "/home/chatsiri/Dropbox/reversing_engineer/write_sig/signature_trojan.ndb";
+            file_sig  = "/home/chatsiri/Dropbox/reversing_engineer/write_sig/signature_trojan.ndb";
             char const *file_name_offset[FILE_SIZE];
             file_name_offset[0] = "/home/chatsiri/sda1/workspacecpp/clamav-devel/test/clam-petite.exe";
-						
+
             for(int count_file = 0; count_file < 	FILE_SIZE; count_file++) {
                 file_type_vec.push_back(file_name_offset[count_file]);
                 mapped_file_vec.push_back(&s_mapped_fpe[count_file]);
+                //read data from file structure.
+                struct MAPPED_FILE_PE *mf_pe = mapped_file_vec[0];
+                boost::hash<char *> hash_file_name;
+                mf_pe->file_map_md5 = hash_file_name(const_cast<char *>(file_name_offset[0]));
 
             }
-#endif 
+
+#endif
 
         }
 #if _WIN32
 
 
 #elif __linux__
-        std::vector<const char*> file_type_vec;
+        std::vector<const char *> file_type_vec;
         struct MAPPED_FILE_PE s_mapped_fpe[FILE_SIZE];
         std::vector<MAPPED_FILE_PE *> mapped_file_vec;
-				const char * file_sig;
-#endif 
+        const char *file_sig;
+#endif
 
 };
 
@@ -50,7 +59,7 @@ TEST_F(PELayoutControllerTest, InitialMapFileOffsetHandler)
     filestructure::mapped_file_controller<struct MAPPED_FILE_PE>
             mfc;
     std::vector<const char *> char_vec;
-    const char * file_name = "E:\\Dropbox\\reversing_engineer\\reversing_files_test\\clam_ISmsi_ext.exe";
+    const char *file_name = "E:\\Dropbox\\reversing_engineer\\reversing_files_test\\clam_ISmsi_ext.exe";
     char_vec.push_back(file_name);
 
     MAPPED_FILE_PE *file_pe = new MAPPED_FILE_PE();
@@ -67,11 +76,11 @@ TEST_F(PELayoutControllerTest, InitialMapFileOffsetHandler)
 
 #elif __linux__
 
-	 LOG(INFO) << "Initial Mapped file type start...";		
+    LOG(INFO) << "Initial Mapped file type start...";
 
-		file_offset_handler<struct common_filetype, struct MAPPED_FILE_PE>  fileoffset_h;			
+    file_offset_handler<struct common_filetype, struct MAPPED_FILE_PE>  fileoffset_h;
 
-		EXPECT_TRUE(fileoffset_h.mapped_file(file_type_vec, mapped_file_vec, fileoffset_h, file_sig));
+    EXPECT_TRUE(fileoffset_h.mapped_file(file_type_vec, mapped_file_vec, fileoffset_h, file_sig));
 
     boost::shared_ptr<std::vector<MAPPED_FILE_PE * > > mappedf_vec_ptr =
             fileoffset_h.get_mappedf_vec_ptr();
@@ -79,20 +88,26 @@ TEST_F(PELayoutControllerTest, InitialMapFileOffsetHandler)
     std::vector<MAPPED_FILE_PE *> *mapped_file_vec_ptr = mappedf_vec_ptr.get();
 
 
-		typename std::vector<MAPPED_FILE_PE*>::iterator iter_mapped_file;
-		for(iter_mapped_file = mapped_file_vec_ptr->begin(); 
-				iter_mapped_file != mapped_file_vec_ptr->end(); 
-				++iter_mapped_file)
-		{
-							MAPPED_FILE_PE * mf_pe = *iter_mapped_file;
-							unsigned char * data = mf_pe->data;
-							size_t size  = mf_pe->size; 
-						  EXPECT_GT(size,0);
-							ASSERT_TRUE(*data != NULL);
-		}
+    typename std::vector<MAPPED_FILE_PE *>::iterator iter_mapped_file;
+
+    for(iter_mapped_file = mapped_file_vec_ptr->begin();
+            iter_mapped_file != mapped_file_vec_ptr->end();
+            ++iter_mapped_file) {
+        MAPPED_FILE_PE *mf_pe = *iter_mapped_file;
+        unsigned char *data = mf_pe->data;
+        size_t size  = mf_pe->size;
+        EXPECT_GT(size,0);
+        ASSERT_TRUE(*data != NULL);
+    }
+
+#endif
+
+
+    //filestructure::layout_controller<struct IMAGE_NT_HEADERS_EXT, struct MAPPED_FILE_PE>  *pe_layout =
+    filestructure::pe_layout_controller<struct IMAGE_NT_HEADERS_EXT, struct MAPPED_FILE_PE> pe_layout;
+    pe_layout.get_header(mapped_file_vec_ptr);
+    pe_layout.get_offset(mapped_file_vec_ptr);
 
     EXPECT_TRUE(fileoffset_h.unmapped_file(mapped_file_vec));
-#endif 
-
 
 }

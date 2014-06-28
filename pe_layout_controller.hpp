@@ -25,11 +25,13 @@ namespace filestructure
 
         public:
 
+						pe_layout_controller(){ }
+
             std::map<uint64_t,struct IMAGE_NT_HEADERS *> &
             get_header(std::vector<MappedFileLayout *> *mapped_file_vec);
 
             virtual std::vector<HeaderFile *>&
-            get_offset(std::vector<MappedFileLayout *> *mapped_file_vec) = 0;
+            get_offset(std::vector<MappedFileLayout *> *mapped_file_vec);
 
             /**
             * @brief Pre scan pe flie layout before send to post scanning.
@@ -39,7 +41,7 @@ namespace filestructure
             *
             * @return bool for check all file completed or not.
             */
-            virtual bool pre_scan_layout(std::vector<MappedFileLayout *> *mapped_file_vec)  = 0;
+            virtual bool pre_scan_layout(std::vector<MappedFileLayout *> *mapped_file_vec);
 
 
         private:
@@ -59,7 +61,7 @@ namespace filestructure
 
             std::vector<struct IMAGE_NT_HEADERS *> pe_header;
 		
-						std::map<uint64_t, struct IMAGE_NT_HEADERS*> header_file_map;
+						std::map<uint64_t, struct IMAGE_NT_HEADERS* > header_file_map;
     };
 
 
