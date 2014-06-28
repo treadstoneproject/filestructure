@@ -205,8 +205,8 @@ libfilestructure_adir = $(includedir)/filestructure
 #Header
 libfilestructure_a_HEADERS = layout_controller.hpp \
 pe_layout_controller.hpp \
-logger/logging.h \
-logger/stringprintf.h
+logger/logging.hpp \
+logger/stringprintf.hpp
 
 
 # library

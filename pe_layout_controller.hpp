@@ -11,7 +11,7 @@
 //internal lib.
 #include "pe.hpp"
 #include "layout_controller.hpp"
-#include "logger/logging.h"
+#include "logger/logging.hpp"
 
 #define MIN(x,y) ((x < y)?(x):(y))
 
@@ -59,7 +59,7 @@ namespace filestructure
 
             std::vector<struct IMAGE_NT_HEADERS *> pe_header;
 		
-						std::map<uint64_t, IMAGE_NT_HEADERS *> header_file_map;
+						std::map<uint64_t, struct IMAGE_NT_HEADERS*> header_file_map;
     };
 
 

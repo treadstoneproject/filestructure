@@ -41,7 +41,7 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
             iter_mf_vec != mapped_ftype_ptr_vec->end();
             ++iter_mf_vec) {
         mapped_file_ptr = *iter_mf_vec;
-
+				nt_header = new IMAGE_NT_HEADERS;
         if (*mapped_file_ptr->data < sizeof(struct IMAGE_DOS_HEADER)) {
             LOG(INFO) << "Mappper data < IMAGE_DOS_HEADER";
             continue;
@@ -51,14 +51,18 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
         if (dos_header->e_magic != IMAGE_DOS_SIGNATURE) {
             LOG(INFO) << "Mapper e_mage != IMAGE_DOS_SIGNATURE";
-            header_file_map.insert(std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(0, nt_header));
+						uint64_t fmd5 = mapped_file_ptr->file_map_md5;
+            header_file_map.insert(
+										std::pair<uint64_t, IMAGE_NT_HEADERS*>(fmd5, nt_header));
 
             continue;
         }
 
         if (dos_header->e_lfanew < 0) {
             LOG(INFO) << "Mapper e_lfanew < 0";
-            header_file_map.insert(std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(0, nt_header));
+            //header_file_map.insert(
+						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS>(mapped_file_ptr->file_map_md5, nt_header));
+
 
             continue;
         }
@@ -69,7 +73,9 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
         if (mapped_file_ptr->size < headers_size) {
             LOG(INFO) << "Mapper size < headers_size";
-            header_file_map.insert(std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(0, nt_header));
+            //header_file_map.insert(
+						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS>(mapped_file_ptr->file_map_md5, nt_header));
+
 
             continue;
         }
@@ -89,7 +95,9 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
                 nt_header->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
                 mapped_file_ptr->size > headers_size) {
 
-            header_file_map.insert(std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(0, nt_header));
+            //header_file_map.insert(
+						//				std::make_pair<uint64_t, IMAGE_NT_HEADERS *>(mapped_file_ptr->file_map_md5, nt_header));
+
 
             LOG(INFO) << "push back completed";
         }

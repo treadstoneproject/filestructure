@@ -225,6 +225,7 @@ log.ERROR
 
 #object file
 *.o
+*.a
 .deps/
 .deps/*
 *.hpp.swp

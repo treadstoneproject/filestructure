@@ -1,5 +1,5 @@
-#include "filestructure/logger/logging.h"
-#include "filestructure/logger/stringprintf.h"
+#include "filestructure/logger/logging.hpp"
+#include "filestructure/logger/stringprintf.hpp"
 
 
 class SystemTestingEnvironment : public testing::Environment
@@ -17,9 +17,11 @@ class SystemTestingEnvironment : public testing::Environment
 
 
         explicit SystemTestingEnvironment(int argc,char **argv) {
-				  	 initial_logging("/home/chatsiri/workspacecpp/pthread_sync_ocl/log");
-					 	//Support Win32:initial_logging("E:\\workspacecpp\\filestructure\\log");
-
+#ifdef _WIN32
+            initial_logging("E:\\workspacecpp\\filestructure\\log");
+#elif __linux__
+            initial_logging("//home//chatsiri//workspacecpp//pthread_sync_ocl//log");
+#endif
             LOG(INFO)<<"Init System logger start : SystemTestingEnvironment";
         }
 };
