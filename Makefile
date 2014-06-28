@@ -107,7 +107,7 @@ AMTAR = $${TAR-tar}
 AM_CFLAGS = 
 
 # debug, optimized
-AM_CXXFLAGS = -I$(top_srcdir)/src/ 
+AM_CXXFLAGS = -I$(top_srcdir)/src/ -std=c++0x 
 AM_LDFLAGS = 
 AUTOCONF = ${SHELL} /home/chatsiri/workspacecpp/pthread_sync_ocl/build-aux/missing --run autoconf
 AUTOHEADER = ${SHELL} /home/chatsiri/workspacecpp/pthread_sync_ocl/build-aux/missing --run autoheader

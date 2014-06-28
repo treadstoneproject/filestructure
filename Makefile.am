@@ -1,5 +1,5 @@
 # debug, optimized
-AM_CXXFLAGS   = -I$(top_srcdir)/src/ @AM_CXXFLAGS@
+AM_CXXFLAGS   = -I$(top_srcdir)/src/ -std=c++0x @AM_CXXFLAGS@
 
 # Make src file 
 # libarries for read and handle file structure.
