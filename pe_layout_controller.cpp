@@ -29,7 +29,7 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 {
     LOG(INFO) << "Intial PE header, pe_file_controller<MAPPED_FILE>::get_pe_header...";
     LOG(INFO) << "get_pe_header, vector_size : " << mapped_ftype_ptr_vec->size();
-		
+
     typedef std::pair<uint64_t, struct IMAGE_NT_HEADERS *>  hmap_pair;
     PIMAGE_DOS_HEADER dos_header;
     PIMAGE_NT_HEADERS nt_header;
@@ -133,7 +133,7 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
             LOG(INFO) << "File not initial MD5 of file in pre scanning";
         }
 
-
+				pe_offset_vec_sptr = boost::make_shared<std::vector<HeaderFile *> >(pe_map_vec_ptr->size());
         //File Map MD5 for
         std::map<uint64_t, IMAGE_NT_HEADERS *>::iterator iter_header_file =
                 header_file_map.find(pe_map_ptr->file_map_md5);
@@ -145,8 +145,8 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
             rva_block_     = nt_header->OptionalHeader.AddressOfEntryPoint;
             buffer_length_ = pe_map_ptr->size -((uint8_t *)&nt_header - pe_map_ptr->data);
 
-						LOG(INFO) << "PE rva_block_ : " << rva_block_;
-						LOG(INFO) << "PE buffer_length_ : " << buffer_length_;
+            LOG(INFO) << "PE rva_block_ : " << rva_block_;
+            LOG(INFO) << "PE buffer_length_ : " << buffer_length_;
 
             nt_headers_ext = new struct IMAGE_NT_HEADERS_EXT;
             nt_headers_ext->rva_block  = rva_block_;
@@ -154,21 +154,31 @@ get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
 
             section = IMAGE_FIRST_SECTION(nt_header);
             count_offset = 0;
+						DWORD section_rva;
 
             while(count_offset < MIN(nt_header->FileHeader.NumberOfSections, 60)) {
                 if((uint8_t *)&section -
                         (uint8_t *)&nt_header + sizeof(IMAGE_SECTION_HEADER) < pe_map_ptr->size) {
+
                     if(nt_headers_ext->rva_block >= section->VirtualAddress &&
-                            nt_headers_ext->rva_block < section->VirtualAddress +
-                            section->SizeOfRawData) {
-                        uint64_t  pe_offset_start = section->PointerToRawData + \
-                                (nt_headers_ext->rva_block - section->VirtualAddress);
-                        nt_headers_ext->offset      = pe_offset_start;// Offset start scanning
+                       section_rva < section->VirtualAddress) {
+
+												nt_headers_ext->section_rva    = section->VirtualAddress;
+												nt_headers_ext->section_offset = section->PointerToRawData;
+ 
                         nt_headers_ext->data_offset = pe_map_ptr->data;// Data str from file.
                         nt_headers_ext->size        = pe_map_ptr->size;// Size of file.
+
                         pe_offset_vec_sptr->push_back(	nt_headers_ext );
+
+												LOG(INFO) << "PointerToRawData: " <<  nt_headers_ext->section_offset;
+												LOG(INFO) << "VirtualAddress  : " << nt_headers_ext->section_rva;
+                        LOG(INFO) << "Offset data  : "  << nt_headers_ext->data_offset;
+                        LOG(INFO) << "Size of data : "  << nt_headers_ext->size;
+												break;
                     }//if
-										count_offset++;
+										section++;
+                    count_offset++;
                 }//if
 
             }//while
