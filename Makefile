@@ -107,7 +107,7 @@ AMTAR = $${TAR-tar}
 AM_CFLAGS = 
 
 # debug, optimized
-AM_CXXFLAGS = -I$(top_srcdir)/src/ 
+AM_CXXFLAGS = -I$(top_srcdir)/src/ -std=c++0x 
 AM_LDFLAGS = 
 AUTOCONF = ${SHELL} /home/chatsiri/workspacecpp/pthread_sync_ocl/build-aux/missing --run autoconf
 AUTOHEADER = ${SHELL} /home/chatsiri/workspacecpp/pthread_sync_ocl/build-aux/missing --run autoheader
@@ -205,8 +205,8 @@ libfilestructure_adir = $(includedir)/filestructure
 #Header
 libfilestructure_a_HEADERS = layout_controller.hpp \
 pe_layout_controller.hpp \
-logger/logging.h \
-logger/stringprintf.h
+logger/logging.hpp \
+logger/stringprintf.hpp
 
 
 # library
