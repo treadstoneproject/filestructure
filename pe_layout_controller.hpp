@@ -46,21 +46,10 @@ namespace filestructure
 
         private:
 
-            std::vector<MappedFileLayout *> *mapped_file_vec_;
-
-            struct IMAGE_NT_HEADERS *image_nt_header;
-
-            boost::shared_ptr<std::vector<MappedFileLayout *> >  pe_header_vec;
             //retrive_offset_lite
             boost::shared_ptr<std::vector<HeaderFile *> > pe_offset_vec_sptr;
             // file buffer
-            std::vector<uint8_t> file_buffer_vec;
-
-            // add buffer and address of file.
-            std::map<uint8_t *, size_t> file_buff_addr_map;
-
-            std::vector<struct IMAGE_NT_HEADERS *> pe_header;
-		
+	
 						std::map<uint64_t, struct IMAGE_NT_HEADERS* > header_file_map;
     };
 
