@@ -72,7 +72,6 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
         LOG(INFO) << "Step 1) header size" << headers_size;
 
         if (mapped_file_ptr->size < headers_size) {
-            LOG(INFO) << "Mapper size < headers_size";
             header_file_map.insert(hmap_pair(fmd5, nt_header));
             continue;
         }
@@ -82,11 +81,11 @@ get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 
         headers_size += nt_header->FileHeader.SizeOfOptionalHeader;
 
-        LOG(INFO) << "header size" <<headers_size;
+        LOG(INFO) << "header size : " <<headers_size;
 
-        LOG(INFO) << "mapped_file_ptr->size" << mapped_file_ptr->size;
+        LOG(INFO) << "mapped_file_ptr->size : " << mapped_file_ptr->size;
 
-        LOG(INFO) << "Signature" << nt_header->Signature;
+        LOG(INFO) << "Signature : " << nt_header->Signature;
 
         if (nt_header->Signature == IMAGE_NT_SIGNATURE &&
                 nt_header->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 &&
