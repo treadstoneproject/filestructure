@@ -1,13 +1,13 @@
-#ifndef FILESTRUCTURE_ELF_PROCESS_CONTROLLER_H
-#define FILESTRUCTURE_ELF_PROCESS_CONTROLLER_H
+#ifndef FILESTRUCTURE_ELF_LAYOUT_CONTROLLER_H
+#define FILESTRUCTURE_ELF_LAYOUT_CONTROLLER_H
 
 #include "elf.h"
-#include "filetypes.h"
+//#include "filetypes.h"
 #include <vector>
 namespace filestructure{
 
 	template<typename MappedFileType,typename MappedFileLayout>
-	class elf_process_controller : public flietypes<MappedFileType, MappedFileLayout>  {
+	class elf_layout_controller : public flietypes<MappedFileType, MappedFileLayout>  {
 
 	public:
 		
@@ -27,6 +27,5 @@ namespace filestructure{
 
 	};
 
-	//template class flietypes <MAPPED_FILE_PE, MAPPED_FILE_PE>;
 }
-#endif // !FILESTRUCTURE_ELF_PROCESS_CONTROLLER_H
+#endif // !FILESTRUCTURE_ELF_LAYOUT_CONTROLLER_H

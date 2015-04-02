@@ -274,9 +274,9 @@ struct IMAGE_NT_HEADERS_EXT {
     //contain type
     uint64_t          rva_block;
     size_t            size_block;
-		//Section Virtual Address, PointerToRawData.
-		DWORD section_rva;
-		DWORD section_offset;
+    //Section Virtual Address, PointerToRawData.
+    DWORD section_rva;
+    DWORD section_offset;
 };
 
 
