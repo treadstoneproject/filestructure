@@ -1,6 +1,6 @@
 File structure
 ==============
 
-* Submodule support HNMAV-OCL.
+* Submodule support Tracethreat-MAT.
 * File structure use in pre-process scans detail of information on files.
-* Now file support : PE
+* Now file support : PE, ELF and Process
