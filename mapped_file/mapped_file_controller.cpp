@@ -3,6 +3,7 @@
 #include "filestructure/mapped_file/mapped_file_controller.hpp"
 
 #include "filestructure/logger/logging.hpp"
+
 #include <stdexcept>
 #include <exception>
 

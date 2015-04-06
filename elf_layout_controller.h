@@ -1,8 +1,12 @@
 #ifndef FILESTRUCTURE_ELF_LAYOUT_CONTROLLER_H
 #define FILESTRUCTURE_ELF_LAYOUT_CONTROLLER_H
 
-#include "elf.h"
-//#include "filetypes.h"
+#if   _WIN32
+#include "elf.hpp"
+#elif __linux__
+#include "filestructure/elf.h"
+#endif
+
 #include <vector>
 namespace filestructure{
 

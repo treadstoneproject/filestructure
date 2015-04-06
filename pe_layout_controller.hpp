@@ -30,9 +30,18 @@
 #include <map>
 
 //internal lib.
+
+
+#if   _WIN32
 #include "pe.hpp"
 #include "layout_controller.hpp"
 #include "logger/logging.hpp"
+#elif __linux__
+#include "filestructure/pe.hpp"
+#include "filestructure/layout_controller.hpp"
+#include "filestructure/logger/logging.hpp"
+#endif
+
 
 #define MIN(x,y) ((x < y)?(x):(y))
 
@@ -46,7 +55,7 @@ namespace filestructure
 
         public:
 
-						pe_layout_controller(){ }
+			pe_layout_controller(){ }
 
             std::map<uint64_t,struct IMAGE_NT_HEADERS *> &
             get_header(std::vector<MappedFileLayout *> *mapped_file_vec);

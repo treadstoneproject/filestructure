@@ -1,18 +1,25 @@
 #if   _WIN32
-#include "filestructure/mapped_file/mapped_file_controller.h"
+#include "filestructure/mapped_file/mapped_file_controller.hpp"
 #elif __linux__
 #include "utils/file_offset_handler.hpp"
 #define FILE_SIZE 1
 #endif
 
-#include "filestructure/pe.hpp"
+
 #include <vector>
 
 #include "boost/functional/hash.hpp"
-#include "filestructure/pe_layout_controller.hpp"
 
-using namespace utils;
+
+#include "filestructure/pe_layout_controller.hpp"
+#include "filestructure/pe.hpp"
+
+
+#if _WIN32
 using filestructure::pe_layout_controller;
+#elif __linux__
+using namespace utils;
+#endif
 
 class PELayoutControllerTest : public ::testing::Test
 {
@@ -102,12 +109,14 @@ TEST_F(PELayoutControllerTest, InitialMapFileOffsetHandler)
 
 #endif
 
-
-    //filestructure::layout_controller<struct IMAGE_NT_HEADERS_EXT, struct MAPPED_FILE_PE>  *pe_layout =
+	
+#if _WIN32
+#elif __linux__
     filestructure::pe_layout_controller<struct IMAGE_NT_HEADERS_EXT, struct MAPPED_FILE_PE> pe_layout;
     pe_layout.get_header(mapped_file_vec_ptr);
     pe_layout.get_offset(mapped_file_vec_ptr);
 
     EXPECT_TRUE(fileoffset_h.unmapped_file(mapped_file_vec));
+#endif
 
 }

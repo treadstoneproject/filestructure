@@ -2,9 +2,7 @@
 
 #include <vector>
 
-#include "elf_layout_controller.h"
-//#include "pe.h"
-//#include "logger/logging.h"
+#include "filestructure/elf_layout_controller.h"
 
 using namespace filestructure;
 

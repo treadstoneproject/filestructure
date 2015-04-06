@@ -19,6 +19,7 @@
  */
 
 #include "boost/make_shared.hpp"
+
 #include "filestructure/pe_layout_controller.hpp"
 
 using namespace filestructure;
