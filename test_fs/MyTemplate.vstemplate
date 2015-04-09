@@ -1,0 +1,27 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>test_fs</Name>
+    <Description>test filestructure under win32 environment.</Description>
+    <ProjectType>VC</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>test_fs</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="test_fs.vcxproj" File="test_fs.vcxproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="false" TargetFileName="$projectname$.vcxproj.filters">test_fs.vcxproj.filters</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="stdafx.cpp">stdafx.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="test_fs.cpp">test_fs.cpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="test_pe_layout_controller.hpp">test_pe_layout_controller.hpp</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="stdafx.h">stdafx.h</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="targetver.h">targetver.h</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="ReadMe.txt">ReadMe.txt</ProjectItem>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

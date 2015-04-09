@@ -1,12 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filestructure", "filestructure\filestructure.vcxproj", "{F92AC849-CC29-43E3-9770-03996E2C7F1E}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F67AC924-2028-43EB-868C-E5534E9E9D15} = {F67AC924-2028-43EB-868C-E5534E9E9D15}
-	EndProjectSection
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filestructure", "filestructure\filestructure.vcxproj", "{9F7F5972-2229-4FBC-B489-578EE8B39777}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_fs", "test_fs\test_fs.vcxproj", "{F67AC924-2028-43EB-868C-E5534E9E9D15}"
 EndProject
@@ -16,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F92AC849-CC29-43E3-9770-03996E2C7F1E}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F92AC849-CC29-43E3-9770-03996E2C7F1E}.Debug|Win32.Build.0 = Debug|Win32
-		{F92AC849-CC29-43E3-9770-03996E2C7F1E}.Release|Win32.ActiveCfg = Release|Win32
-		{F92AC849-CC29-43E3-9770-03996E2C7F1E}.Release|Win32.Build.0 = Release|Win32
+		{9F7F5972-2229-4FBC-B489-578EE8B39777}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9F7F5972-2229-4FBC-B489-578EE8B39777}.Debug|Win32.Build.0 = Debug|Win32
+		{9F7F5972-2229-4FBC-B489-578EE8B39777}.Release|Win32.ActiveCfg = Release|Win32
+		{9F7F5972-2229-4FBC-B489-578EE8B39777}.Release|Win32.Build.0 = Release|Win32
 		{F67AC924-2028-43EB-868C-E5534E9E9D15}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F67AC924-2028-43EB-868C-E5534E9E9D15}.Debug|Win32.Build.0 = Debug|Win32
 		{F67AC924-2028-43EB-868C-E5534E9E9D15}.Release|Win32.ActiveCfg = Release|Win32

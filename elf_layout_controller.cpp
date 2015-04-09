@@ -1,55 +1,44 @@
 
 
+
+#include "boost/make_shared.hpp"
+
 #include <vector>
 
-#include "filestructure/elf_layout_controller.h"
+#include "filestructure/elf_layout_controller.hpp"
 
 using namespace filestructure;
 
-template<typename MappedFileType,
-         typename MappedFileLayout>
-std::vector<MappedFileLayout *>&
-elf_process_controller<MappedFileType, MappedFileLayout>::
-get_header_section(std::vector<MappedFileType *> *mapped_ftype_ptr_vec)
+template<typename HeaderFile, typename MappedFileLayout>
+std::map<uint64_t, IMAGE_NT_HEADERS *>& elf_layout_controller<HeaderFile, MappedFileLayout>::
+	get_header(std::vector<MappedFileLayout *> *mapped_ftype_ptr_vec)
 {
-    std::vector<MappedFileLayout *> mapf_layout_vec;
-    return mapf_layout_vec;
+	return header_file_map;
 }
 
 
-template<typename MappedFileType,
-         typename MappedFileLayout>
-MappedFileLayout&
-elf_process_controller<MappedFileType, MappedFileLayout>::
-retrive_offset(MappedFileType *map_ftype_ptr,
-        MappedFileLayout *map_flayout_header)
+template<typename HeaderFile, typename MappedFileLayout>
+std::vector<HeaderFile *>&
+	elf_layout_controller<HeaderFile, MappedFileLayout>::
+	get_offset(std::vector<MappedFileLayout *> *pe_map_vec_ptr)
 {
-    return *map_flayout_header;
+	  
+	return elf_offset_vec;
 }
 
-template<typename MappedFileType,
-         typename MappedFileLayout>
-std::vector<MappedFileLayout *>
-elf_process_controller<MappedFileType, MappedFileLayout>::
-retrive_offset_lite(
-        std::vector<MappedFileType *>   map_ftype_ptr_vec,
-        std::vector<MappedFileLayout *> map_flayout_ptr_vec)
+template<typename HeaderFile, typename MappedFileLayout>
+elf_layout_controller<HeaderFile, MappedFileLayout>::
+	elf_layout_controller(std::vector<MappedFileLayout *> *mapped_file_vec)
 {
-    return map_flayout_ptr_vec;
+
+	
 }
 
-template<typename MappedFileType,
-         typename MappedFileLayout>
-bool elf_process_controller<MappedFileType, MappedFileLayout>::get_file_support()
-{
-    LOG(INFO) << "get_file_support initial \n";
-    return true;
-}
 
 
 //Why compile pass.
-template class elf_process_controller<struct MAPPED_FILE_PE, struct MAPPED_FILE_PE>;
+template class elf_layout_controller<struct MAPPED_FILE_PE, struct MAPPED_FILE_PE>;
 
-#if LINUX
-template class elf_process_controller<struct MAPPED_FILE_PE, struct MAPPED_FILE_PE>;
+#if __linux__
+template class elf_layout_controller<struct MAPPED_FILE_PE, struct MAPPED_FILE_PE>;
 #endif // !LINUX

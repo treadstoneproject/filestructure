@@ -1,6 +1,8 @@
 #include "filestructure/logger/logging.hpp"
 #include <stdarg.h>
-#include <stdio.h>
+#include <stdio.h> 
+
+#define va_copy(dest, src) (dest = src)
 
 using std::string;
 

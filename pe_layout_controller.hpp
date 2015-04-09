@@ -18,8 +18,8 @@
 */
 
 /*  Titles			                                          Authors	         Date
- *- Layout of PE structure.                               R.Chatsiri
- */
+*- Layout of PE structure.                               R.Chatsiri
+*/
 
 
 //external library
@@ -49,39 +49,39 @@ namespace filestructure
 {
 
 
-    template<typename HeaderFile, typename MappedFileLayout>
-    class pe_layout_controller : layout_controller<HeaderFile, MappedFileLayout>
-    {
+	template<typename HeaderFile, typename MappedFileLayout>
+	class pe_layout_controller : layout_controller<HeaderFile, MappedFileLayout>
+	{
 
-        public:
+	public:
 
-			pe_layout_controller(){ }
+		pe_layout_controller(){ }
 
-            std::map<uint64_t,struct IMAGE_NT_HEADERS *> &
-            get_header(std::vector<MappedFileLayout *> *mapped_file_vec);
+		std::map<uint64_t,struct IMAGE_NT_HEADERS *> &
+			get_header(std::vector<MappedFileLayout *> *mapped_file_vec);
 
-            virtual std::vector<HeaderFile *>&
-            get_offset(std::vector<MappedFileLayout *> *mapped_file_vec);
+		virtual std::vector<HeaderFile *>&
+			get_offset(std::vector<MappedFileLayout *> *mapped_file_vec);
 
-            /**
-            * @brief Pre scan pe flie layout before send to post scanning.
-            * Layout set status on MappedFileLayout structure in order to found/not found infected file.
-            *
-            * @param mapped_file_vec MappedFileLayout structure of file type.
-            *
-            * @return bool for check all file completed or not.
-            */
-            virtual bool pre_scan_layout(std::vector<MappedFileLayout *> *mapped_file_vec);
+		/**
+		* @brief Pre scan pe flie layout before send to post scanning.
+		* Layout set status on MappedFileLayout structure in order to found/not found infected file.
+		*
+		* @param mapped_file_vec MappedFileLayout structure of file type.
+		*
+		* @return bool for check all file completed or not.
+		*/
+		virtual bool pre_scan_layout(std::vector<MappedFileLayout *> *mapped_file_vec);
 
 
-        private:
+	private:
 
-            //retrive_offset_lite
-            boost::shared_ptr<std::vector<HeaderFile *> > pe_offset_vec_sptr;
-            // file buffer
-	
-						std::map<uint64_t, struct IMAGE_NT_HEADERS* > header_file_map;
-    };
+		//retrive_offset_lite
+		std::vector<HeaderFile *>  pe_offset_vec;
+		// file buffer
+
+		std::map<uint64_t, struct IMAGE_NT_HEADERS* > header_file_map;
+	};
 
 
 
